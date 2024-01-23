@@ -2,6 +2,7 @@
 
 import sys
 import tkinter as tk
+import subprocess
 
 arg_count = len(sys.argv)
 if arg_count>1:
@@ -10,12 +11,13 @@ if arg_count>1:
         with open("workmode.txt","w") as file_write:
             file_write.write("set")
             file_write.close()
-            #should add offset so that 30 min reminders don't just happen at :30 and :00, but rather 30 minutes and 1 hour after the original command was run.
+            subprocess.call(['sh','./addcron.sh','set'])
     elif sys.argv[1] == "unset":
         print("unset work mode")
         with open("workmode.txt","w") as file_write:
             file_write.write("unset")
             file_write.close()
+            subprocess.call(['sh','./addcron.sh','unset'])
     elif sys.argv[1] == "get":
         print("current work mode: ")
         with open("workmode.txt","r") as file_read:
