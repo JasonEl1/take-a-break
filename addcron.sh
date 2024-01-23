@@ -13,5 +13,5 @@ fi
 
 
 if [ $1 == "set" ]; then
-    crontab -l | { cat; echo "$mins,$opp_mins * * * * cd downloads && /usr/bin/python3 /Users/jasonelisei/Downloads/reminder.py"; } | crontab -
+    crontab -l | { cat; echo "$mins,$opp_mins * * * * cd downloads && /usr/bin/python3 $2/reminder.py"; } | crontab -
 fi

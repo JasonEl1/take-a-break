@@ -19,18 +19,21 @@ if arg_count>1:
         with open(workmode_path,"w") as file_write:
             file_write.write("set")
             file_write.close()
-            subprocess.call(['sh',addcron_path,'set'])
+            subprocess.call(['sh',addcron_path,'set',temppath[:-1]])
     elif sys.argv[1] == "unset":
         print("unset work mode")
         with open(workmode_path,"w") as file_write:
             file_write.write("unset")
             file_write.close()
-            subprocess.call(['sh',addcron_path,'unset'])
+            subprocess.call(['sh',addcron_path,'unset',temppath[:-1]])
     elif sys.argv[1] == "get":
         print("current work mode: ")
         with open(workmode_path,"r") as file_read:
             print(file_read.readlines()[0])
             file_read.close()
+    else:
+        print("Unknown command, please try again")
+        exit()
 else:
     mode = ""
     with open(workmode_path,"r") as file_read:
