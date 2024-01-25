@@ -20,5 +20,7 @@ work get -> get current state of work mode (can be 'set' or 'unset')
 work set -> set work mode to 'set'
 work unset -> set work mode to 'unset'
 work next -> get  time remaining until next reminder
-work update -> set next reminder to 30 minutes from now. Only works if work mode is 'set'
+work update -> set next reminder to 30 minutes from now. Only works if work mode is 'set'.
 ```
+
+Note: `update` achieves the same result as runnning `unset` followed by `set` and `next`.
