@@ -16,7 +16,9 @@ When `work mode` is enabled, you will be reminded to take a break from your work
 The state of `work mode` can be altered using the following commands (assuming chosen alias is `work`) :
 
 ```
-work get -> get the current state of work mode (can be 'set' or 'unset'
+work get -> get current state of work mode (can be 'set' or 'unset')
 work set -> set work mode to 'set'
 work unset -> set work mode to 'unset'
+work next -> get  time remaining until next reminder
+work update -> set next reminder to 30 minutes from now. Only works if work mode is 'set'
 ```
