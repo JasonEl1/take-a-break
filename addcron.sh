@@ -11,7 +11,18 @@ else
     opp_mins=$(($mins-30))
 fi
 
+first=0
+second=0
+
+if [ $mins -lt $opp_mins ]; then
+    first=$mins
+    second=$opp_mins
+else
+    first=$opp_mins
+    second=$mins
+fi
+
 
 if [ $1 == "set" ]; then
-    crontab -l | { cat; echo "$mins,$opp_mins * * * * cd downloads && /usr/bin/python3 $2/reminder.py"; } | crontab -
+    crontab -l | { cat; echo "$first,$second * * * * cd downloads && /usr/bin/python3 $2/reminder.py"; } | crontab -
 fi

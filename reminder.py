@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# v0.3.0
 
 import sys
 import tkinter as tk
@@ -6,16 +7,15 @@ import subprocess
 import os
 import datetime
 
-version = "v0.2.0"
-
 fullpath = os.path.abspath(__file__)
 name_len = len(os.path.basename(__file__))
 temppath = fullpath[:-name_len]
 
 workmode_path = f"{temppath}/workmode.txt"
 addcron_path = f"{temppath}/addcron.sh"
+sound_path = f"{temppath}/sound.wav"
 
-def check_next(): #needs to return time to next in minutes
+def check_next():
     current_crontab = subprocess.check_output(['crontab','-l'])
     current_crontab = current_crontab.decode('utf-8')
     correct_entry = ""
@@ -31,7 +31,7 @@ def check_next(): #needs to return time to next in minutes
     second_time = correct_entry.split(',')[1]
     second_time = int(second_time)
     if current_time > first_time and current_time > second_time:
-        return first_time - current_time
+        return 60 - current_time + first_time
     elif current_time >= first_time and current_time < second_time:
         return second_time - current_time
     elif current_time <= first_time and current_time < second_time:
@@ -82,9 +82,20 @@ else:
     with open(workmode_path,"r") as file_read:
         mode = file_read.readlines()[0]
         if mode == "set":
+            os_type = subprocess.check_output(['uname'])
+            os_type = os_type.decode('utf-8').strip("\n")
+            process = None
+            if os_type == "Darwin":
+                process = subprocess.Popen(['afplay',sound_path])
+            elif os_type == "Linux":
+                process = subprocess.Popen(['aplay',sound_path])
+            else:
+                print("Your OS is not yet supported.")
             root = tk.Tk()
-            root.geometry("400x0")
+            root.geometry("400x100")
             root.attributes("-topmost", True)
             root.eval('tk::PlaceWindow . center')
             root.title("TAKE A BREAK!")
             root.mainloop()
+            if process:
+                process.terminate()
