@@ -49,7 +49,7 @@ def check_next():
     elif current_time <= first_time and current_time < second_time:
         return first_time - current_time
     else:
-        print("Error...")
+        print("error...")
 
 arg_count = len(sys.argv)
 if arg_count>1:
@@ -57,30 +57,30 @@ if arg_count>1:
         if read_work_mode() == "unset":
             write_work_mode("set")
         else:
-            print("Work mode already set")
+            print("work mode already set")
     elif sys.argv[1] == "unset":
         if read_work_mode() == "set":
             write_work_mode("unset")
         else:
-            print("Work mode already unset")
+            print("work mode already unset")
     elif sys.argv[1] == "get":
-        print(f"Current mode is {read_work_mode()}")
+        print(f"current mode is {read_work_mode()}")
     elif sys.argv[1] == "next":
         try:
             next = check_next()
-            print(f"Next reminder is in {next} minutes.")
+            print(f"next reminder is in {next} minutes.")
         except:
-            print("Please enable work mode to check next reminder")
+            print("please enable work mode to check next reminder")
     elif sys.argv[1] == "update":
         if read_work_mode() == "set":
             subprocess.call(['sh',addcron_path, 'unset',temppath[:-1]])
             subprocess.call(['sh',addcron_path, 'set',temppath[:-1]])
             next = check_next()
-            print(f"Updated. Next reminder is in {next} minutes.")
+            print("updated... " + f"next reminder is in {next} minutes")
         else:
-            print("Please enable work mode to update")
+            print("please enable work mode to update")
     else:
-        print("Unknown command, please try again")
+        print("unknown command, please try again")
         exit()
 else:
     if read_work_mode() == "set":
@@ -92,7 +92,7 @@ else:
         elif os_type == "Linux":
             process = subprocess.Popen(['aplay',sound_path])
         else:
-            print("Warning : your operating system is not yet supported for the sound feature")
+            print("warning : your operating system is not yet supported for the sound feature")
         root = tk.Tk()
         root.geometry("400x100")
         root.attributes("-topmost", True)
