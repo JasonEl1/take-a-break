@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# v0.4.0
+# v0.4.1
 
 import sys
 import tkinter as tk
@@ -49,14 +49,20 @@ def check_next():
     elif current_time <= first_time and current_time < second_time:
         return first_time - current_time
     else:
-        print("Logical error...")
+        print("Error...")
 
 arg_count = len(sys.argv)
 if arg_count>1:
     if sys.argv[1] == "set":
-        write_work_mode("set")
+        if read_work_mode() == "unset":
+            write_work_mode("set")
+        else:
+            print("Work mode already set")
     elif sys.argv[1] == "unset":
-        write_work_mode("unset")
+        if read_work_mode() == "set":
+            write_work_mode("unset")
+        else:
+            print("Work mode already unset")
     elif sys.argv[1] == "get":
         print(f"Current mode is {read_work_mode()}")
     elif sys.argv[1] == "next":
@@ -86,7 +92,7 @@ else:
         elif os_type == "Linux":
             process = subprocess.Popen(['aplay',sound_path])
         else:
-            print("Your OS is not yet supported.")
+            print("Warning : your operating system is not yet supported for the sound feature")
         root = tk.Tk()
         root.geometry("400x100")
         root.attributes("-topmost", True)
