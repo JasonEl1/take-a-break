@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-read -p "What name would you like to give this alias? (enter 'none' to skip):" aliasname
+read -p "What name would you like to give this alias? (enter 'none' to skip): " aliasname
 
 new_entry="alias ${aliasname}='source $(pwd)/venv/bin/activate && python3 $(pwd)/reminder.py'"
 
@@ -15,5 +15,12 @@ else
     exit
 fi
 
-source ./venv/bin/activate
+if ! test -d $(pwd)/venv; then
+    python3 -m venv venv
+    echo "created local venv"
+else
+    echo "venv already exists, skipping creation"
+fi
+
+source $(pwd)/venv/bin/activate
 pip3 install -r requirements.txt
