@@ -33,7 +33,7 @@ def check_next():
     current_crontab = current_crontab.decode('utf-8')
     correct_entry = ""
     for line in current_crontab.splitlines():
-        if line.endswith("reminder.py"):
+        if "reminder.py" in line:
             correct_entry = line
             break
     current_time = datetime.datetime.now()
