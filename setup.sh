@@ -2,7 +2,7 @@
 
 read -p "What name would you like to give this alias? (enter 'none' to skip): " aliasname
 
-new_entry="alias ${aliasname}='source $(pwd)/venv/bin/activate && python3 $(pwd)/reminder.py'"
+new_entry="alias ${aliasname}='python3 $(pwd)/reminder.py'"
 
 if grep -q "$new_entry" ~/.zshrc; then
     echo "alias already exists"
