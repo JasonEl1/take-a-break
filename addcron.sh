@@ -24,5 +24,5 @@ fi
 
 
 if [ $1 == "set" ]; then
-    crontab -l | { cat; echo "$first,$second * * * * cd downloads && /usr/bin/python3 $2/reminder.py"; } | crontab -
+    crontab -l | { cat; echo "$first,$second * * * * cd $2 && source ./venv/bin/activate && /usr/bin/python3 reminder.py"; } | crontab -
 fi

@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# v0.4.1
+# v0.5.0
 
 import sys
 import tkinter as tk
@@ -98,6 +98,8 @@ else:
         root.attributes("-topmost", True)
         root.eval('tk::PlaceWindow . center')
         root.title("TAKE A BREAK!")
+        label = tk.Label(root, text="Take a break!")
+        label.pack()
         root.mainloop()
         if process:
             process.terminate()
