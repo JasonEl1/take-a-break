@@ -3,6 +3,7 @@
 crontab -l | grep -v "reminder.py" | crontab -
 
 mins=$(date +%M)
+mins=$((mins-1))
 opp_mins=0
 
 if [ $mins -lt 30 ]; then

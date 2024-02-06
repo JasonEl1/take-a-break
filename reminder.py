@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# v0.5.0
+# v0.5.1
 
 import sys
 import tkinter as tk
@@ -9,24 +9,30 @@ import datetime
 
 fullpath = os.path.abspath(__file__)
 name_len = len(os.path.basename(__file__))
-temppath = fullpath[:-name_len]
+fullpath = fullpath[:-name_len]
 
-workmode_path = f"{temppath}/workmode.txt"
-addcron_path = f"{temppath}/addcron.sh"
-sound_path = f"{temppath}/sound.wav"
+workmode_path = f"{fullpath}/workmode.txt"
+addcron_path = f"{fullpath}/addcron.sh"
+sound_path = f"{fullpath}/sound.wav"
 
 def write_work_mode(mode):
     with open(workmode_path,"w") as file_write:
         file_write.write(mode)
         file_write.close()
-        subprocess.call(['sh',addcron_path,mode,temppath[:-1]])
+        subprocess.call(['sh',addcron_path,mode,fullpath[:-1]])
     print(f"{mode} work mode")
 
 def read_work_mode():
-    with open(workmode_path,"r") as file_read:
-        mode = file_read.readlines()[0]
-        return mode
-        file_read.close()
+    if os.path.exists(workmode_path):
+        with open(workmode_path,"r") as file_read:
+            mode = file_read.readlines()[0]
+            return mode
+            file_read.close()
+    else:
+        file_write = open(workmode_path, 'a')
+        file_write.write("unset")
+        file_write.close()
+        return "unset"
 
 def check_next():
     current_crontab = subprocess.check_output(['crontab','-l'])
@@ -73,8 +79,8 @@ if arg_count>1:
             print("please enable work mode to check next reminder")
     elif sys.argv[1] == "update":
         if read_work_mode() == "set":
-            subprocess.call(['sh',addcron_path, 'unset',temppath[:-1]])
-            subprocess.call(['sh',addcron_path, 'set',temppath[:-1]])
+            subprocess.call(['sh',addcron_path, 'unset',fullpath[:-1]])
+            subprocess.call(['sh',addcron_path, 'set',fullpath[:-1]])
             next = check_next()
             print("updated... " + f"next reminder is in {next} minutes")
         else:
