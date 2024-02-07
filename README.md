@@ -4,7 +4,7 @@ Python command line tool to remind you to take breaks when working.
 
 ### Quick setup (MacOS)
 
-Open the `take-a-break` folder after downloading and run the following command in the terminal: `bash setup.sh`
+Open the `take-a-break` folder after downloading and run the following command in the terminal: `./setup.sh`
 
 Enter the alias you want to use for this tool. I personally use it as `work`
 This creates an alias named `work` or whatever else you decide to use in your .zshrc file. You can now use `work` (or your alternative chosen alias) followed by the appropriate commands to use the tool.

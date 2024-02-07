@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# v0.5.1
+# v0.5.2
 
 import sys
 import tkinter as tk
@@ -12,7 +12,7 @@ name_len = len(os.path.basename(__file__))
 fullpath = fullpath[:-name_len]
 
 workmode_path = f"{fullpath}/workmode.txt"
-addcron_path = f"{fullpath}/addcron.sh"
+addcron_path = f"{fullpath}/scripts/addcron.sh"
 sound_path = f"{fullpath}/sound.wav"
 
 def write_work_mode(mode):
