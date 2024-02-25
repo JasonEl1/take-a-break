@@ -23,4 +23,5 @@ work next -> get  time remaining until next reminder
 work update -> set next reminder to 30 minutes from now. Only works if work mode is 'set'.
 ```
 
-Note: `update` achieves the same result as runnning `unset` followed by `set` and `next`.
+> [!NOTE]
+> `update` achieves the same result as runnning `unset` followed by `set` and `next`.
