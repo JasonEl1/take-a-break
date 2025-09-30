@@ -23,4 +23,6 @@ work next -> get  time remaining until next reminder
 work update -> set next reminder to 30 minutes from now. Only works if work mode is 'set'.
 ```
 
+To set a break reminder for a longer or shorter duration than the default 30 minutes, use `work set -t {duration}`
+
 Note: `update` achieves the same result as runnning `unset` followed by `set` and `next`.

@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# v0.6.0
 
 import argparse
 import os
@@ -17,15 +18,15 @@ applescript_path = f"{fullpath}/popup.scpt"
 
 parser = argparse.ArgumentParser(prog="Take-A-Break v0.6.0")
 parser.add_argument("action",help="action to execute")
-parser.add_argument("--value",default="-1")
+parser.add_argument("-t","--time",default="30")
 args = parser.parse_args()
 
 def read_work_mode():
     if os.path.exists(workmode_path):
         with open(workmode_path,"r") as file_read:
             mode = file_read.readlines()[0]
-            return mode
             file_read.close()
+            return mode
     else:
         file_write = open(workmode_path, 'a')
         file_write.write("unset")
@@ -66,8 +67,8 @@ if(args.action == "get"):
     print(f"current mode is {read_work_mode()}")
 elif(args.action == "set"):
     if read_work_mode() == "unset":
-        if args.value != "-1":
-            time = args.value
+        if args.time != "-1":
+            time = args.time
 
             write_work_mode("set",time)
         else:
