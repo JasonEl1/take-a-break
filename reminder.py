@@ -1,26 +1,24 @@
 #!/usr/bin/python3
-# v0.5.2
 
-import sys
-import tkinter as tk
-import subprocess
+import argparse
 import os
+import subprocess
 import datetime
+import platform
 
 fullpath = os.path.abspath(__file__)
 name_len = len(os.path.basename(__file__))
 fullpath = fullpath[:-name_len]
 
 workmode_path = f"{fullpath}/workmode.txt"
-addcron_path = f"{fullpath}/scripts/addcron.sh"
+addcron_path = f"{fullpath}/addcron.sh"
 sound_path = f"{fullpath}/sound.wav"
+applescript_path = f"{fullpath}/popup.scpt"
 
-def write_work_mode(mode):
-    with open(workmode_path,"w") as file_write:
-        file_write.write(mode)
-        file_write.close()
-        subprocess.call(['sh',addcron_path,mode,fullpath[:-1]])
-    print(f"{mode} work mode")
+parser = argparse.ArgumentParser(prog="Take-A-Break v0.6.0")
+parser.add_argument("action",help="action to execute")
+parser.add_argument("--value",default="-1")
+args = parser.parse_args()
 
 def read_work_mode():
     if os.path.exists(workmode_path):
@@ -33,6 +31,13 @@ def read_work_mode():
         file_write.write("unset")
         file_write.close()
         return "unset"
+
+def write_work_mode(mode,time="30"):
+    with open(workmode_path,"w") as file_write:
+        file_write.write(mode)
+        file_write.close()
+        subprocess.call(['sh',addcron_path,mode,time,fullpath])
+    print(f"{mode} work mode")
 
 def check_next():
     current_crontab = subprocess.check_output(['crontab','-l'])
@@ -57,55 +62,65 @@ def check_next():
     else:
         print("error...")
 
-arg_count = len(sys.argv)
-if arg_count>1:
-    if sys.argv[1] == "set":
-        if read_work_mode() == "unset":
-            write_work_mode("set")
+if(args.action == "get"):
+    print(f"current mode is {read_work_mode()}")
+elif(args.action == "set"):
+    if read_work_mode() == "unset":
+        if args.value != "-1":
+            time = args.value
+
+            write_work_mode("set",time)
         else:
-            print("work mode already set")
-    elif sys.argv[1] == "unset":
-        if read_work_mode() == "set":
-            write_work_mode("unset")
-        else:
-            print("work mode already unset")
-    elif sys.argv[1] == "get":
-        print(f"current mode is {read_work_mode()}")
-    elif sys.argv[1] == "next":
-        try:
-            next = check_next()
-            print(f"next reminder is in {next} minutes.")
-        except:
-            print("please enable work mode to check next reminder")
-    elif sys.argv[1] == "update":
-        if read_work_mode() == "set":
-            subprocess.call(['sh',addcron_path, 'unset',fullpath[:-1]])
-            subprocess.call(['sh',addcron_path, 'set',fullpath[:-1]])
-            next = check_next()
-            print("updated... " + f"next reminder is in {next} minutes")
-        else:
-            print("please enable work mode to update")
+            write_work_mode("set","30")
     else:
-        print("unknown command, please try again")
-        exit()
-else:
+        print("work mode already set")
+elif(args.action == "unset"):
     if read_work_mode() == "set":
-        os_type = subprocess.check_output(['uname'])
-        os_type = os_type.decode('utf-8').strip("\n")
+        write_work_mode("unset","30")
+    else:
+        print("work mode already unset")
+elif(args.action == "next"):
+    try:
+        next = check_next()
+        print(f"next reminder is in {next} minutes.")
+    except:
+        print("please enable work mode to check next reminder")
+elif(args.action == "update"):
+    if read_work_mode() == "set":
+        subprocess.call(['sh',addcron_path, 'unset',fullpath[:-1]])
+        subprocess.call(['sh',addcron_path, 'set',fullpath[:-1]])
+        next = check_next()
+        print("updated... " + f"next reminder is in {next} minutes")
+    else:
+        print("please enable work mode to update")
+elif(args.action == "reminder"):
+    if read_work_mode() == "set":
+        os_type = platform.system()
         process = None
         if os_type == "Darwin":
             process = subprocess.Popen(['afplay',sound_path])
-        elif os_type == "Linux":
+            applescript = 'display alert "Break Reminder" message "Take a break and be more productive!" buttons {"Close", "Cancel"} default button "Close" cancel button "Cancel"'
+            subprocess.run(["osascript","-e", applescript])
             process = subprocess.Popen(['aplay',sound_path])
+
+            import tkinter as tk
+            from tkinter import messagebox
+
+            root = tk.Tk()
+            root.title("Break Reminder")
+            messagebox.showinfo("Reminder", "Reminder to take a break!")
+            root.mainloop()
+        elif os_type == "Windows":
+            import tkinter as tk
+            from tkinter import messagebox
+
+            root = tk.Tk()
+            root.title("Break Reminder")
+            messagebox.showinfo("Reminder", "Reminder to take a break!")
+            root.mainloop()
+
         else:
             print("warning : your operating system is not yet supported for the sound feature")
-        root = tk.Tk()
-        root.geometry("400x100")
-        root.attributes("-topmost", True)
-        root.eval('tk::PlaceWindow . center')
-        root.title("TAKE A BREAK!")
-        label = tk.Label(root, text="Take a break!")
-        label.pack()
-        root.mainloop()
-        if process:
-            process.terminate()
+else:
+    print("unknown command, please try again")
+    exit()

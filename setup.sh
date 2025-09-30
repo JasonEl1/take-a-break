@@ -15,13 +15,3 @@ else
     source ~/.zshrc
     exit
 fi
-
-if ! test -d $(pwd)/venv; then
-    python3 -m venv venv
-    echo "created local venv"
-else
-    echo "venv already exists, skipping creation"
-fi
-
-source $(pwd)/venv/bin/activate
-pip3 install -r requirements.txt
