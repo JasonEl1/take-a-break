@@ -52,16 +52,11 @@ def check_next():
     current_time = current_time.minute
     correct_entry = correct_entry.split()[0]
     first_time = int(correct_entry.split(',')[0])
-    second_time = int(correct_entry.split(',')[1])
 
-    if current_time > first_time and current_time >= second_time:
+    if current_time > first_time:
         return 60 - current_time + first_time
-    elif current_time >= first_time and current_time < second_time:
-        return second_time - current_time
-    elif current_time <= first_time and current_time < second_time:
-        return first_time - current_time
     else:
-        print("error...")
+        return first_time - current_time
 
 if(args.action == "get"):
     print(f"current mode is {read_work_mode()}")
@@ -84,13 +79,14 @@ elif(args.action == "next"):
     try:
         next = check_next()
         print(f"next reminder is in {next} minutes.")
-    except:
+    except Exception as e:
         print("please enable work mode to check next reminder")
+        print(e)
 elif(args.action == "update"):
     if read_work_mode() == "set":
-        subprocess.call(['sh',addcron_path, 'unset',fullpath[:-1]])
-        subprocess.call(['sh',addcron_path, 'set',fullpath[:-1]])
-        next = check_next()
+        subprocess.call(['sh',addcron_path, 'unset',"30",fullpath])
+        subprocess.call(['sh',addcron_path, 'set',"30",fullpath])
+        next=check_next()
         print("updated... " + f"next reminder is in {next} minutes")
     else:
         print("please enable work mode to update")
