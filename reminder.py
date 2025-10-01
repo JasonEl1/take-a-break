@@ -122,6 +122,9 @@ elif(args.action == "reminder"):
             messagebox.showinfo("Reminder", "Reminder to take a break!")
             root.mainloop()
         elif os_type == "Windows":
+            import winsound
+            winsound.PlaySound(sound_path, winsound.SND_ASYNC)
+
             import tkinter as tk
             from tkinter import messagebox
 
