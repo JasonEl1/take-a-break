@@ -1,6 +1,6 @@
 # take-a-break
 
-Python command line tool to remind you to take breaks when working.
+Python command line tool to remind you to take breaks when working. Currently only works with Unix-like OS.
 
 ### Quick setup (MacOS)
 
