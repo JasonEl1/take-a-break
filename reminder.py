@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-# v0.6.0
+
+VERSION = "v0.6.1"
 
 import argparse
 import os
@@ -13,10 +14,10 @@ fullpath = fullpath[:-name_len]
 
 workmode_path = f"{fullpath}/workmode.txt"
 addcron_path = f"{fullpath}/addcron.sh"
+rmcron_path = f"{fullpath}/rmcron.sh"
 sound_path = f"{fullpath}/sound.wav"
-applescript_path = f"{fullpath}/popup.scpt"
 
-parser = argparse.ArgumentParser(prog="Take-A-Break v0.6.0")
+parser = argparse.ArgumentParser(prog=f"Take-A-Break {version}")
 parser.add_argument("action",help="action to execute")
 parser.add_argument("-t","--time",default="30")
 args = parser.parse_args()
@@ -57,6 +58,9 @@ def check_next():
         return 60 - current_time + first_time
     else:
         return first_time - current_time
+
+def remove_cron():
+    subprocess.run(["sh",rmcron_path])
 
 if(args.action == "get"):
     print(f"current mode is {read_work_mode()}")
