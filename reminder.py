@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.6.1"
+VERSION = "v0.7.0"
 
 import argparse
 import os
@@ -13,11 +13,13 @@ name_len = len(os.path.basename(__file__))
 fullpath = fullpath[:-name_len]
 
 workmode_path = f"{fullpath}/workmode.txt"
-addcron_path = f"{fullpath}/addcron.sh"
-rmcron_path = f"{fullpath}/rmcron.sh"
+addcron_path = f"{fullpath}/scripts/addcron.sh"
+rmcron_path = f"{fullpath}/scripts/rmcron.sh"
 sound_path = f"{fullpath}/sound.wav"
+applescript_path = f"{fullpath}/scripts/popup.scpt"
+change_mode_path = f"{fullpath}/scripts/change_mode.sh"
 
-parser = argparse.ArgumentParser(prog=f"Take-A-Break {version}")
+parser = argparse.ArgumentParser(prog=f"Take-A-Break {VERSION}")
 parser.add_argument("action",help="action to execute")
 parser.add_argument("-t","--time",default="30")
 args = parser.parse_args()
@@ -25,20 +27,31 @@ args = parser.parse_args()
 def read_work_mode():
     if os.path.exists(workmode_path):
         with open(workmode_path,"r") as file_read:
-            mode = file_read.readlines()[0]
+            mode = file_read.readlines()[0].split()
             file_read.close()
-            return mode
+            return mode[0]
     else:
         file_write = open(workmode_path, 'a')
         file_write.write("unset")
         file_write.close()
         return "unset"
 
-def write_work_mode(mode,time="30"):
-    with open(workmode_path,"w") as file_write:
-        file_write.write(mode)
+def read_work_delay():
+    if os.path.exists(workmode_path):
+        with open(workmode_path,"r") as file_read:
+            mode = file_read.readlines()[0].split()
+            file_read.close()
+            if(mode[0]=="set"):
+                return mode[1]
+    else:
+        file_write = open(workmode_path, 'a')
+        file_write.write("set 30")
         file_write.close()
-        subprocess.call(['sh',addcron_path,mode,time,fullpath])
+        return "30"
+
+def write_work_mode(mode,time="30"):
+    subprocess.call(['sh',change_mode_path,fullpath, mode,time])
+    subprocess.call(['sh',addcron_path,fullpath,mode,time])
     print(f"{mode} work mode")
 
 def check_next():
@@ -59,9 +72,6 @@ def check_next():
     else:
         return first_time - current_time
 
-def remove_cron():
-    subprocess.run(["sh",rmcron_path])
-
 if(args.action == "get"):
     print(f"current mode is {read_work_mode()}")
 elif(args.action == "set"):
@@ -77,6 +87,7 @@ elif(args.action == "set"):
 elif(args.action == "unset"):
     if read_work_mode() == "set":
         write_work_mode("unset","30")
+        subprocess.run(["sh",rmcron_path])
     else:
         print("work mode already unset")
 elif(args.action == "next"):
@@ -97,11 +108,10 @@ elif(args.action == "update"):
 elif(args.action == "reminder"):
     if read_work_mode() == "set":
         os_type = platform.system()
-        process = None
         if os_type == "Darwin":
             process = subprocess.Popen(['afplay',sound_path])
-            applescript = 'display alert "Break Reminder" message "Take a break and be more productive!" buttons {"Close", "Cancel"} default button "Close" cancel button "Cancel"'
-            subprocess.run(["osascript","-e", applescript])
+            subprocess.run(["osascript", applescript_path,fullpath,read_work_delay()])
+        elif os_type == "Linux":
             process = subprocess.Popen(['aplay',sound_path])
 
             import tkinter as tk

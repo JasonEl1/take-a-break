@@ -2,7 +2,7 @@
 
 crontab -l | grep -v "reminder.py" | crontab -
 
-time="$2"
+time="$3"
 mins=$(date +%M)
 mins=$((10#${mins}))
 
@@ -11,9 +11,9 @@ if [ "$next" -gt 59 ]; then
     next=$(( $next - 60 ))
 fi
 
-ALIAS=$(cat $(dirname "$0")/alias.txt)
+ALIAS=$(cat "$1"/alias.txt)
 
-if [ "$1" == "set" ]; then
+if [ "$2" == "set" ]; then
 
     (crontab -l; echo "$next * * * * python3 "$3"reminder.py reminder") | crontab -
 fi
