@@ -65,7 +65,7 @@ def check_next():
     current_time = datetime.datetime.now()
     current_time = current_time.minute
     correct_entry = correct_entry.split()[0]
-    first_time = int(correct_entry.split(',')[0])
+    first_time = int(correct_entry)
 
     if current_time > first_time:
         return 60 - current_time + first_time
@@ -94,9 +94,8 @@ elif(args.action == "next"):
     try:
         next = check_next()
         print(f"next reminder is in {next} minutes.")
-    except Exception as e:
+    except:
         print("please enable work mode to check next reminder")
-        print(e)
 elif(args.action == "update"):
     if read_work_mode() == "set":
         subprocess.call(['sh',addcron_path, 'unset',"30",fullpath])

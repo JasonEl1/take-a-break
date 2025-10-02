@@ -18,6 +18,7 @@ The state of `work mode` can be altered using the following commands (assuming c
 ```
 work get -> get current state of work mode (can be 'set' or 'unset')
 work set -> set work mode to 'set'
+work set --time=value -> set work mode to 'set' with a specific reminder interval (minutes)
 work unset -> set work mode to 'unset'
 work next -> get  time remaining until next reminder
 work update -> set next reminder to 30 minutes from now. Only works if work mode is 'set'.

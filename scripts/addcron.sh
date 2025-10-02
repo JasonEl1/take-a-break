@@ -11,8 +11,6 @@ if [ "$next" -gt 59 ]; then
     next=$(( $next - 60 ))
 fi
 
-ALIAS=$(cat "$1"/alias.txt)
-
 if [ "$2" == "set" ]; then
 
     (crontab -l; echo "$next * * * * python3 "$3"reminder.py reminder") | crontab -
