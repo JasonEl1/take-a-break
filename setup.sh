@@ -11,7 +11,6 @@ elif [ "$aliasname" = "none" ]; then
     echo "skipped alias creation"
 else
     echo "$new_entry" >> ~/.zshrc
-    echo "$aliasname" > "alias.txt"
     echo "created alias ${aliasname} in ~/.zshrc"
     source ~/.zshrc
     exit

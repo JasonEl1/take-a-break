@@ -13,7 +13,7 @@ fi
 
 if [ "$2" == "set" ]; then
 
-    (crontab -l; echo "$next * * * * python3 "$3"reminder.py reminder") | crontab -
+    (crontab -l; echo "$next * * * * "$3"reminder.py reminder") | crontab -
 fi
 
 if [ "$1" == "unset" ]; then

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.7.0"
+VERSION = "v0.7.1"
 
 import argparse
 import os
