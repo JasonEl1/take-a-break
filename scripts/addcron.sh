@@ -1,4 +1,5 @@
 #!/bin/bash
+# called with folder path, mode, time
 
 crontab -l | grep -v "reminder.py" | crontab -
 
@@ -13,9 +14,9 @@ fi
 
 if [ "$2" == "set" ]; then
 
-    (crontab -l; echo "$next * * * * "$3"reminder.py reminder") | crontab -
+    (crontab -l; echo "$next * * * * "$1"reminder.py reminder") | crontab -
 fi
 
-if [ "$1" == "unset" ]; then
+if [ "$2" == "unset" ]; then
     (crontab -l | grep -v -F "reminder") | crontab -
 fi
