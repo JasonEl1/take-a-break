@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.7.1"
+VERSION = "v0.8.0"
 
 import argparse
 import os
@@ -96,14 +96,6 @@ elif(args.action == "next"):
         print(f"next reminder is in {next} minutes.")
     except:
         print("please enable work mode to check next reminder")
-elif(args.action == "update"):
-    if read_work_mode() == "set":
-        subprocess.call(['sh',addcron_path, 'unset',"30",fullpath])
-        subprocess.call(['sh',addcron_path, 'set',"30",fullpath])
-        next=check_next()
-        print("updated... " + f"next reminder is in {next} minutes")
-    else:
-        print("please enable work mode to update")
 elif(args.action == "reminder"):
     if read_work_mode() == "set":
         os_type = platform.system()

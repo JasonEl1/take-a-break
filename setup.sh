@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 echo "What name would you like to give this alias? (enter 'none' to skip): "
 read aliasname
