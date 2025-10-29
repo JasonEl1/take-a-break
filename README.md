@@ -19,11 +19,13 @@ The following commands are available (assuming chosen alias is `work`) :
 
 ```
 work get -> get current state of work mode (can be 'set' or 'unset')
-work set -> set work mode to 'set'
-work set --time=value -> set work mode to 'set' with a specific reminder interval (minutes)
+work set -> set work mode to 'set' with default interval of 20 minutes
+work set -t value -> set work mode to 'set' with a specific reminder interval (minutes)
 work unset -> set work mode to 'unset'
 work next -> get  time remaining until next reminder
 ```
+
+The program will remind you to take a break after the specified time interval with the option to reset the reminder or unset work mode. The program does not continue running after `work set` is called, but makes use of cron to schedule the reminder at the correct time.
 
 ### Uninstallation
 

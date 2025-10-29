@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
-VERSION = "v0.8.0"
+VERSION = "v0.8.1"
+
+DEFAULT_TIME="20"
 
 import argparse
 import os
@@ -21,7 +23,7 @@ change_mode_path = f"{fullpath}/scripts/change_mode.sh"
 
 parser = argparse.ArgumentParser(prog=f"Take-A-Break {VERSION}")
 parser.add_argument("action",help="action to execute")
-parser.add_argument("-t","--time",default="30")
+parser.add_argument("-t","--time",default=DEFAULT_TIME)
 args = parser.parse_args()
 
 def read_work_mode():
@@ -45,11 +47,11 @@ def read_work_delay():
                 return mode[1]
     else:
         file_write = open(workmode_path, 'a')
-        file_write.write("set 30")
+        file_write.write(f"set {DEFAULT_TIME}")
         file_write.close()
-        return "30"
+        return DEFAULT_TIME
 
-def write_work_mode(mode,time="30"):
+def write_work_mode(mode,time=DEFAULT_TIME):
     subprocess.call(['sh',change_mode_path,fullpath, mode,time])
     subprocess.call(['sh',addcron_path,fullpath,mode,time])
     print(f"{mode} work mode")
@@ -81,12 +83,12 @@ elif(args.action == "set"):
 
             write_work_mode("set",time)
         else:
-            write_work_mode("set","30")
+            write_work_mode("set",DEFAULT_TIME)
     else:
         print("work mode already set")
 elif(args.action == "unset"):
     if read_work_mode() == "set":
-        write_work_mode("unset","30")
+        write_work_mode("unset",DEFAULT_TIME)
         subprocess.run(["sh",rmcron_path])
     else:
         print("work mode already unset")
