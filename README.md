@@ -9,7 +9,6 @@ Open the `take-a-break` folder after downloading and run the following command i
 OR
 
 ```
-
 git clone https://github.com/JasonEl1/take-a-break.git
 cd take-a-break
 ./setup.sh

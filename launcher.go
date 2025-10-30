@@ -1,5 +1,3 @@
-//take-a-break: VERSION=0.9.0
-
 package main
 
 import (
