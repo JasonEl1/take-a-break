@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.8.1"
+VERSION = "v0.9.0"
 
 DEFAULT_TIME="20"
 
@@ -20,6 +20,7 @@ rmcron_path = f"{fullpath}/scripts/rmcron.sh"
 sound_path = f"{fullpath}/sound.wav"
 applescript_path = f"{fullpath}/scripts/popup.scpt"
 change_mode_path = f"{fullpath}/scripts/change_mode.sh"
+uninstall_path = f"{fullpath}/uninstall.sh"
 
 parser = argparse.ArgumentParser(prog=f"Take-A-Break {VERSION}")
 parser.add_argument("action",help="action to execute")
@@ -128,6 +129,8 @@ elif(args.action == "reminder"):
 
         else:
             print("warning : your operating system is not yet supported for the sound feature")
+elif(args.action=="uninstall"):
+    subprocess.call(['sh',uninstall_path])
 else:
     print("unknown command, please try again")
     exit()

@@ -1,20 +1,10 @@
-#!/bin/sh
+echo "Are you sure you want to uninstall take-a-break? [y/n]"
+read confirmation
 
-echo "What alias do you use for take-a-break?: "
-read aliasname
-
-sed -i.bak "/alias ${aliasname}/d" ~/.zshrc
-
-source ~/.zshrc
-
-echo "Removed alias ${aliasname}."
-
-folder_name=$(basename $(pwd))
-
-echo "Delete ${folder_name} folder as well? [y/n]."
-read delete_folder
-
-if [ ${delete_folder} == "y" ]; then
-  cd ..
-  echo "rm -rf ${folder_name}"
+if [ $confirmation = "y" ]; then
+    rm -rf ~/.local/share/take-a-break
+    sudo rm /usr/local/bin/work
+    echo "take-a-break has been uninstalled."
+else
+    echo "cancelling uninstallation."
 fi

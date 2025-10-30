@@ -1,19 +1,14 @@
 # take-a-break
 
-Python command line tool to remind you to take breaks when working. Currently only works with Unix-like OS.
+Python command line tool to remind you to take breaks when working. Currently only tested on macos.
 
 ### Quick setup (MacOS)
 
-Note: Currently only works with zsh
-
 Open the `take-a-break` folder after downloading and run the following command in the terminal: `./setup.sh`
-
-Enter the alias you want to use for this tool. I personally use it as `work`
-This creates an alias named `work` or whatever else you decide to use in your .zshrc file. You can now use `work` (or your alternative chosen alias) followed by the appropriate commands to use the tool.
 
 ### How to use the tool:
 
-When `work mode` is enabled, you will be reminded to take a break from your work every 30 mins via a popup window.
+When `work mode` is enabled, you will be reminded to take a break from your work via a popup window at a certain time interval.
 
 The following commands are available (assuming chosen alias is `work`) :
 
@@ -29,6 +24,4 @@ The program will remind you to take a break after the specified time interval wi
 
 ### Uninstallation
 
-Note: Currently only works with zsh
-
-Run `./uninstall.sh` in the `take-a-break` folder and provide your chosen alias name.
+Use the command `work uninstall` and follow the prompts.
