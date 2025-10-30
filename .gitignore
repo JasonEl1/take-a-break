@@ -1,2 +1,4 @@
 .DS_Store
 workmode.txt
+dev_update.sh
+uninstall_dev.sh
