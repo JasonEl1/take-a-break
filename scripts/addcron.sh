@@ -6,15 +6,23 @@ crontab -l | grep -v "reminder.py" | crontab -
 time="$3"
 mins=$(date +%M)
 mins=$((10#${mins}))
+hours=$(date +%H)
+hours=$((10#${hours}))
 
-next=$(( $time + $mins ))
-if [ "$next" -gt 59 ]; then
-    next=$(( $next - 60 ))
+hours=$(( $hours + $(( $time / 60 ))))
+mins=$(( $mins + $(( $time % 60 )) ))
+
+if [ "$mins" -gt 60 ]; then
+    mins=$((mins - 60))
+    hours=$((hours + 1))
+fi
+
+if [ "$hours" -gt 24 ]; then
+  hours=$((hours - 24))
 fi
 
 if [ "$2" == "set" ]; then
-
-    (crontab -l; echo "$next * * * * "$1"reminder.py reminder") | crontab -
+    (crontab -l; echo "$mins $hours * * * "$1"reminder.py reminder") | crontab -
 fi
 
 if [ "$2" == "unset" ]; then

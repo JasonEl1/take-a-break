@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.9.0"
+VERSION = "v0.9.1"
 
 DEFAULT_TIME="20"
 
@@ -16,15 +16,14 @@ fullpath = fullpath[:-name_len]
 
 workmode_path = f"{fullpath}/workmode.txt"
 addcron_path = f"{fullpath}/scripts/addcron.sh"
-rmcron_path = f"{fullpath}/scripts/rmcron.sh"
 sound_path = f"{fullpath}/sound.wav"
 applescript_path = f"{fullpath}/scripts/popup.scpt"
 change_mode_path = f"{fullpath}/scripts/change_mode.sh"
 uninstall_path = f"{fullpath}/uninstall.sh"
 
-parser = argparse.ArgumentParser(prog=f"Take-A-Break {VERSION}")
+parser = argparse.ArgumentParser(prog="work",epilog=f"take-a-break {VERSION}")
 parser.add_argument("action",help="action to execute")
-parser.add_argument("-t","--time",default=DEFAULT_TIME)
+parser.add_argument("-t","--time",default=DEFAULT_TIME,help="reminder time interval")
 args = parser.parse_args()
 
 def read_work_mode():
@@ -66,14 +65,25 @@ def check_next():
             correct_entry = line
             break
     current_time = datetime.datetime.now()
-    current_time = current_time.minute
-    correct_entry = correct_entry.split()[0]
-    first_time = int(correct_entry)
+    current_mins = current_time.minute
+    current_hour = current_time.hour
+    correct_entry = correct_entry.split()
+    reminder_mins = int(correct_entry[0])
+    reminder_hour = int(correct_entry[1])
 
-    if current_time > first_time:
-        return 60 - current_time + first_time
+    if(reminder_hour>=current_hour):
+        hours_to_next=reminder_hour-current_hour
     else:
-        return first_time - current_time
+        hours_to_next=24-current_hour+reminder_hour
+
+    if(reminder_mins>=current_mins):
+        mins_to_next=reminder_mins-current_mins
+    else:
+        mins_to_next=current_mins-reminder_mins
+        hours_to_next-=1
+
+    return 60*hours_to_next + mins_to_next
+
 
 if(args.action == "get"):
     print(f"current mode is {read_work_mode()}")
@@ -90,13 +100,12 @@ elif(args.action == "set"):
 elif(args.action == "unset"):
     if read_work_mode() == "set":
         write_work_mode("unset",DEFAULT_TIME)
-        subprocess.run(["sh",rmcron_path])
     else:
         print("work mode already unset")
 elif(args.action == "next"):
     try:
         next = check_next()
-        print(f"next reminder is in {next} minutes.")
+        print(f"next reminder is in {next} minutes")
     except:
         print("please enable work mode to check next reminder")
 elif(args.action == "reminder"):

@@ -1,8 +1,10 @@
 # take-a-break
 
-Python command line tool to remind you to take breaks when working. Currently only tested on macos.
+Python command line tool to remind you to take breaks when working. Currently only tested on MacOS.
 
-### Quick setup (MacOS)
+No distracting timers, no app running in the background, no large installs, just a simple system to increase productivity.
+
+### Quick setup (MacOS/Linux)
 
 Open the `take-a-break` folder after downloading and run the following command in the terminal: `./setup.sh`
 
@@ -24,6 +26,7 @@ work set          -> set work mode to 'set' with default interval of 20 minutes
 work set -t value -> set work mode to 'set' with a specific reminder interval (minutes)
 work unset        -> set work mode to 'unset'
 work next         -> get  time remaining until next reminder
+work -h           -> show help page
 ```
 
 When `work mode` is enabled, you will be reminded to take a break from your work via a popup window at a certain time interval.
