@@ -12,7 +12,7 @@ hours=$((10#${hours}))
 hours=$(( $hours + $(( $time / 60 ))))
 mins=$(( $mins + $(( $time % 60 )) ))
 
-if [ "$mins" -gt 60 ]; then
+if [ "$mins" -gt 59 ]; then
     mins=$((mins - 60))
     hours=$((hours + 1))
 fi

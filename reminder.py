@@ -79,7 +79,7 @@ def check_next():
     if(reminder_mins>=current_mins):
         mins_to_next=reminder_mins-current_mins
     else:
-        mins_to_next=current_mins-reminder_mins
+        mins_to_next=60-current_mins+reminder_mins
         hours_to_next-=1
 
     return 60*hours_to_next + mins_to_next

@@ -2,8 +2,6 @@
 
 Python command line tool to remind you to take breaks when working. Currently only tested on MacOS.
 
-No distracting timers, no app running in the background, no large installs, just a simple system to increase productivity.
-
 ### Quick setup (MacOS/Linux)
 
 Open the `take-a-break` folder after downloading and run the following command in the terminal: `./setup.sh`
