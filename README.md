@@ -19,12 +19,14 @@ cd take-a-break
 Use the tool using the name `work`. The following commands are available:
 
 ```
-work get          -> get current state of work mode (can be 'set' or 'unset')
-work set          -> set work mode to 'set' with default interval of 20 minutes
-work set -t value -> set work mode to 'set' with a specific reminder interval (minutes)
-work unset        -> set work mode to 'unset'
-work next         -> get  time remaining until next reminder
-work -h           -> show help page
+work get                -> get current state of work mode (can be 'set' or 'unset')
+work set                -> set work mode to 'set' with default interval of 20 minutes
+work set -t value       -> set work mode to 'set' with a specific reminder interval (minutes)
+work unset              -> set work mode to 'unset'
+work next               -> get  time remaining until next reminder
+work message            -> get current reminder message
+work message -m message -> set reminder message to custom string (use string "default" to reset to default)
+work -h                 -> show help page
 ```
 
 When `work mode` is enabled, you will be reminded to take a break from your work via a popup window at a certain time interval.

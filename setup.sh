@@ -8,6 +8,9 @@ cp workmode.txt ~/.local/share/take-a-break/workmode.txt
 cp sound.wav ~/.local/share/take-a-break/sound.wav
 cp -r ./scripts ~/.local/share/take-a-break/scripts
 cp uninstall.sh ~/.local/share/take-a-break/uninstall.sh
+touch message.txt
+echo "Take a break and be more productive!" > message.txt
+cp message.txt ~/.local/share/take-a-break/message.txt
 
 sudo cp work /usr/local/bin/work
 
@@ -17,6 +20,6 @@ read delete_original_dir
 
 if [ $delete_original_dir = "y" ]; then
     cd ..
-    rm -rf ./take-a-brea
+    rm -rf ./take-a-break
     echo "take-a-break directory deleted"
 fi

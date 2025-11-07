@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
-VERSION = "v0.9.1"
+VERSION = "v0.10.0"
 
 DEFAULT_TIME="20"
+DEFAULT_MESSAGE="Take a break and be more productive!"
 
 import argparse
 import os
@@ -20,10 +21,13 @@ sound_path = f"{fullpath}/sound.wav"
 applescript_path = f"{fullpath}/scripts/popup.scpt"
 change_mode_path = f"{fullpath}/scripts/change_mode.sh"
 uninstall_path = f"{fullpath}/uninstall.sh"
+change_message_path = f"{fullpath}/scripts/change_message.sh"
+message_path = f"{fullpath}/message.txt"
 
 parser = argparse.ArgumentParser(prog="work",epilog=f"take-a-break {VERSION}")
 parser.add_argument("action",help="action to execute")
 parser.add_argument("-t","--time",default=DEFAULT_TIME,help="reminder time interval")
+parser.add_argument("-m","--message",default="",help="specify a new reminder message")
 args = parser.parse_args()
 
 def read_work_mode():
@@ -108,6 +112,14 @@ elif(args.action == "next"):
         print(f"next reminder is in {next} minutes")
     except:
         print("please enable work mode to check next reminder")
+elif(args.action == "message"):
+    message=args.message
+    action="set"
+    if(args.message == "default"):
+        message=DEFAULT_MESSAGE
+    elif(args.message == ""):
+        action="get"
+    subprocess.run([change_message_path,message_path,message,action])
 elif(args.action == "reminder"):
     if read_work_mode() == "set":
         os_type = platform.system()
