@@ -25,9 +25,12 @@ work set -t value       -> set work mode to 'set' with a specific reminder inter
 work unset              -> set work mode to 'unset'
 work next               -> get  time remaining until next reminder
 work message            -> get current reminder message
-work message -m message -> set reminder message to custom string (use string "default" to reset to default)
+work message -m message -> set reminder message to custom string
 work -h                 -> show help page
 ```
+
+> [!TIP]
+> Use `work message -m default` to set reminder message back to default
 
 When `work mode` is enabled, you will be reminded to take a break from your work via a popup window at a certain time interval.
 
