@@ -1,5 +1,6 @@
 #!/bin/sh
 
+rm screenshot.png
 mkdir ~/.local/share/take-a-break
 cp reminder.py ~/.local/share/take-a-break/reminder.py
 touch workmode.txt

@@ -36,6 +36,8 @@ When `work mode` is enabled, you will be reminded to take a break from your work
 
 The program will remind you to take a break after the specified time interval with the option to reset the reminder or unset work mode. The program does not continue running after `work set` is called, but makes use of cron to schedule the reminder at the correct time.
 
+![Screenshot](screenshot.png)
+
 ### Uninstallation
 
 Use the command `work uninstall` and follow the prompts.

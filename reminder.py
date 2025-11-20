@@ -26,8 +26,8 @@ message_path = f"{fullpath}/message.txt"
 
 parser = argparse.ArgumentParser(prog="work",epilog=f"take-a-break {VERSION}")
 parser.add_argument("action",help="action to execute")
-parser.add_argument("-t","--time",default=DEFAULT_TIME,help="reminder time interval")
-parser.add_argument("-m","--message",default="",help="specify a new reminder message")
+parser.add_argument("-t","--time",default=DEFAULT_TIME,help="(optional) reminder time interval")
+parser.add_argument("-m","--message",default="",help="(optional) change reminder message. Usage: work message -m {message}")
 args = parser.parse_args()
 
 def read_work_mode():
