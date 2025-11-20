@@ -12,14 +12,14 @@ hours=$((10#${hours}))
 hours=$(( $hours + $(( $time / 60 ))))
 mins=$(( $mins + $(( $time % 60 )) ))
 
-if [ "$mins" -gt 59 ]; then
+while [ "$mins" -gt 59 ]; do
     mins=$((mins - 60))
     hours=$((hours + 1))
-fi
+done
 
-if [ "$hours" -gt 24 ]; then
+while [ "$hours" -gt 23 ]; do
   hours=$((hours - 24))
-fi
+done
 
 if [ "$2" == "set" ]; then
     (crontab -l; echo "$mins $hours * * * "$1"reminder.py reminder") | crontab -
