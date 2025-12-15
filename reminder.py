@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
-VERSION = "v0.10.0"
+VERSION = "v0.10.1"
 
 DEFAULT_TIME="20"
-DEFAULT_MESSAGE="Take a break and be more productive!"
+DEFAULT_MESSAGE="Take a break to be more productive!"
 
 import argparse
 import os
@@ -120,6 +120,8 @@ elif(args.action == "message"):
     elif(args.message == ""):
         action="get"
     subprocess.run([change_message_path,message_path,message,action])
+    if(action=="set"):
+        print(f"Set message to: \"{message}\"")
 elif(args.action == "reminder"):
     if read_work_mode() == "set":
         os_type = platform.system()
