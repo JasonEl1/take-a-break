@@ -25,6 +25,7 @@ on run args
     end try
 
     if productivity_score is not equal to -1 and productivity_score is greater than 0 and productivity_score is less than 11 then
-        do shell script "echo " & ((current date) & " : " & productivity_score) & " >> " & folder_path & "/productivity.log"
+        set date_time to do shell script "date +'%Y-%m-%d %H:%M'"
+        do shell script "echo " & ((date_time) & "," & productivity_score) & " >> " & folder_path & "/productivity.log"
     end if
 end run
