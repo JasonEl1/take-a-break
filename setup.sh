@@ -12,6 +12,7 @@ cp uninstall.sh ~/.local/share/take-a-break/uninstall.sh
 touch message.txt
 echo "Take a break and be more productive!" > message.txt
 cp message.txt ~/.local/share/take-a-break/message.txt
+cp productivity.log ~/.local/share/take-a-break/productivity.log
 
 sudo cp work /usr/local/bin/work
 

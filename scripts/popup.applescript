@@ -16,4 +16,15 @@ on run args
         do shell script "sh " & folder_path & "/scripts/change_mode.sh " & folder_path & " unset 20"
     end if
 
+    set response to display dialog "How productive were you since the last break? (1-10)" with title "optional" default answer "" buttons {"Close"} default button "Close"
+    set productivity_score to -1
+    try
+        set productivity_score to text returned of response as number
+    on error
+
+    end try
+
+    if productivity_score is not equal to -1 and productivity_score is greater than 0 and productivity_score is less than 11 then
+        do shell script "echo " & ((current date) & " : " & productivity_score) & " >> " & folder_path & "/productivity.log"
+    end if
 end run
