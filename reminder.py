@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.12.0"
+VERSION = "v0.12.1"
 
 DEFAULT_TIME="20"
 DEFAULT_MESSAGE="Take a break to be more productive!"
@@ -79,29 +79,34 @@ def check_next():
         if "reminder.py" in line:
             correct_entry = line
             break
-    current_time = datetime.datetime.now()
-    current_mins = current_time.minute
-    current_hour = current_time.hour
-    correct_entry = correct_entry.split()
-    reminder_mins = int(correct_entry[0])
-    reminder_hour = int(correct_entry[1])
+    if(correct_entry!=""):
+        current_time = datetime.datetime.now()
+        current_mins = current_time.minute
+        current_hour = current_time.hour
+        correct_entry = correct_entry.split()
+        reminder_mins = int(correct_entry[0])
+        reminder_hour = int(correct_entry[1])
 
-    if(reminder_hour>=current_hour):
-        hours_to_next=reminder_hour-current_hour
-    else:
-        hours_to_next=24-current_hour+reminder_hour
+        if(reminder_hour>=current_hour):
+            hours_to_next=reminder_hour-current_hour
+        else:
+            hours_to_next=24-current_hour+reminder_hour
 
-    if(reminder_mins>=current_mins):
-        mins_to_next=reminder_mins-current_mins
-    else:
-        mins_to_next=60-current_mins+reminder_mins
-        hours_to_next-=1
+        if(reminder_mins>=current_mins):
+            mins_to_next=reminder_mins-current_mins
+        else:
+            mins_to_next=60-current_mins+reminder_mins
+            hours_to_next-=1
 
-    return 60*hours_to_next + mins_to_next
-
+        return 60*hours_to_next + mins_to_next
+    return -1
 
 if(args.action == "get"):
-    print(f"current mode is {read_work_mode()}")
+    current_mode = read_work_mode()
+    if(check_next() == -1 and current_mode == "set"):
+        current_mode = "unset"
+        write_work_mode("unset")
+    print(f"current mode is {current_mode}")
 elif(args.action == "set"):
     if read_work_mode() == "unset":
         if args.time != "-1":
@@ -118,11 +123,11 @@ elif(args.action == "unset"):
     else:
         print("work mode already unset")
 elif(args.action == "next"):
-    try:
-        next = check_next()
+    next = check_next()
+    if(next!=-1):
         print(f"next reminder is in {next} minutes")
-    except:
-        print("please enable work mode to check next reminder")
+    else:
+        print("enable work mode to check next reminder")
 elif(args.action == "message"):
     message=args.message
     action="set"
