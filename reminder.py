@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.11.0"
+VERSION = "v0.12.0"
 
 DEFAULT_TIME="20"
 DEFAULT_MESSAGE="Take a break to be more productive!"
@@ -10,6 +10,7 @@ import os
 import subprocess
 import datetime
 import platform
+from pathlib import Path
 
 fullpath = os.path.abspath(__file__)
 name_len = len(os.path.basename(__file__))
@@ -19,9 +20,7 @@ workmode_path = f"{fullpath}/workmode.txt"
 addcron_path = f"{fullpath}/scripts/addcron.sh"
 sound_path = f"{fullpath}/sound.wav"
 applescript_path = f"{fullpath}/scripts/popup.scpt"
-change_mode_path = f"{fullpath}/scripts/change_mode.sh"
-uninstall_path = f"{fullpath}/uninstall.sh"
-change_message_path = f"{fullpath}/scripts/change_message.sh"
+uninstall_path = f"{fullpath}/scripts/uninstall.sh"
 message_path = f"{fullpath}/message.txt"
 productivity_log_path = f"{fullpath}/productivity.log"
 
@@ -57,9 +56,20 @@ def read_work_delay():
         return DEFAULT_TIME
 
 def write_work_mode(mode,time=DEFAULT_TIME):
-    subprocess.call(['sh',change_mode_path,fullpath, mode,time])
-    subprocess.call(['sh',addcron_path,fullpath,mode,time])
+    change_mode(mode,time)
+    subprocess.call([addcron_path,fullpath,mode,time])
     print(f"{mode} work mode")
+
+def change_message(mode,message=DEFAULT_MESSAGE):
+    path = Path(message_path)
+    if(mode == "set"):
+        path.write_text(message)
+    elif(mode == "get"):
+        print(f"Current message is: {path.read_text().strip('\n')}")
+
+def change_mode(mode,time=DEFAULT_TIME):
+    path = Path(workmode_path)
+    path.write_text(f"{mode} {time}")
 
 def check_next():
     current_crontab = subprocess.check_output(['crontab','-l'])
@@ -120,7 +130,7 @@ elif(args.action == "message"):
         message=DEFAULT_MESSAGE
     elif(args.message == ""):
         action="get"
-    subprocess.run([change_message_path,message_path,message,action])
+    change_message(action,message)
     if(action=="set"):
         print(f"Set message to: \"{message}\"")
 elif(args.action == "log"):
@@ -156,7 +166,7 @@ elif(args.action == "reminder"):
         else:
             print("warning : your operating system is not yet supported for the sound feature")
 elif(args.action=="uninstall"):
-    subprocess.call(['sh',uninstall_path])
+    subprocess.call([uninstall_path])
 else:
     print("unknown command, please try again")
     exit()
