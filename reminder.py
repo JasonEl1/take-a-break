@@ -1,9 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.12.1"
-
-DEFAULT_TIME="20"
-DEFAULT_MESSAGE="Take a break to be more productive!"
+VERSION = "v0.13.0"
 
 import argparse
 import os
@@ -11,6 +8,7 @@ import subprocess
 import datetime
 import platform
 from pathlib import Path
+import json
 
 fullpath = os.path.abspath(__file__)
 name_len = len(os.path.basename(__file__))
@@ -23,6 +21,12 @@ applescript_path = f"{fullpath}/scripts/popup.scpt"
 uninstall_path = f"{fullpath}/scripts/uninstall.sh"
 message_path = f"{fullpath}/message.txt"
 productivity_log_path = f"{fullpath}/productivity.log"
+settings_path = f"{fullpath}/settings.json"
+
+settings = json.loads(Path(settings_path).read_text())
+
+DEFAULT_TIME=settings["DEFAULT_TIME"]
+DEFAULT_MESSAGE=settings["DEFAULT_MESSAGE"]
 
 parser = argparse.ArgumentParser(prog="work",epilog=f"take-a-break {VERSION}")
 parser.add_argument("action",help="action to execute")
@@ -57,7 +61,7 @@ def read_work_delay():
 
 def write_work_mode(mode,time=DEFAULT_TIME):
     change_mode(mode,time)
-    subprocess.call([addcron_path,fullpath,mode,time])
+    subprocess.call(['sh',addcron_path,fullpath,mode,time])
     print(f"{mode} work mode")
 
 def change_message(mode,message=DEFAULT_MESSAGE):

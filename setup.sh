@@ -14,6 +14,7 @@ echo "Take a break and be more productive!" > message.txt
 cp message.txt ~/.local/share/take-a-break/message.txt
 touch productivity.log
 cp productivity.log ~/.local/share/take-a-break/productivity.log
+cp settings.json ~/.local/share/take-a-break/settings.json
 
 sudo cp work /usr/local/bin/work
 
