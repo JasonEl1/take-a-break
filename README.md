@@ -33,7 +33,7 @@ work -h                 -> show help page
 > [!TIP]
 > Use `work message -m default` to set reminder message back to default
 
-Settings are stored in `~/.local/share/take-a-break/settings.json`
+Settings are stored in `~/.local/share/take-a-break/settings.json`.
 
 When `work mode` is enabled, you will be reminded to take a break from your work via a popup window at a certain time interval. You will also be prompted to (optionally) log how productive you think you were since the previous break.
 

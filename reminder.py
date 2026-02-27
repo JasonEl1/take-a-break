@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.13.0"
+VERSION = "v0.13.1"
 
 import argparse
 import os
@@ -62,14 +62,19 @@ def read_work_delay():
 def write_work_mode(mode,time=DEFAULT_TIME):
     change_mode(mode,time)
     subprocess.call(['sh',addcron_path,fullpath,mode,time])
-    print(f"{mode} work mode")
+    if(mode == "set"):
+        print(f"set work mode with interval {time} minutes")
+    # important: call write_work_mode() with time!=DEFAULT_TIME to hide unset output
+    elif(mode == "unset" and time==DEFAULT_TIME):
+        print(f"unset work mode")
 
 def change_message(mode,message=DEFAULT_MESSAGE):
     path = Path(message_path)
     if(mode == "set"):
         path.write_text(message)
     elif(mode == "get"):
-        print(f"Current message is: {path.read_text().strip('\n')}")
+        current_message = path.read_text().strip('\n')
+        print(f"Current message is: {current_message}")
 
 def change_mode(mode,time=DEFAULT_TIME):
     path = Path(workmode_path)
@@ -109,14 +114,18 @@ if(args.action == "get"):
     current_mode = read_work_mode()
     if(check_next() == -1 and current_mode == "set"):
         current_mode = "unset"
-        write_work_mode("unset")
+        write_work_mode("unset",-1)
     print(f"current mode is {current_mode}")
 elif(args.action == "set"):
     if read_work_mode() == "unset":
-        if args.time != "-1":
+        if(args.time != "-1"):
             time = args.time
-
-            write_work_mode("set",time)
+            try:
+                time = int(time)
+            except ValueError:
+                print("invalid time argument - must be numeric")
+                exit()
+            write_work_mode("set",str(time))
         else:
             write_work_mode("set",DEFAULT_TIME)
     else:
