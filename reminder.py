@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.13.1"
+VERSION = "v0.13.3"
 
 import argparse
 import os
@@ -31,7 +31,7 @@ DEFAULT_MESSAGE=settings["DEFAULT_MESSAGE"]
 parser = argparse.ArgumentParser(prog="work",epilog=f"take-a-break {VERSION}")
 parser.add_argument("action",help="action to execute")
 parser.add_argument("-t","--time",default=DEFAULT_TIME,help="(optional) reminder time interval")
-parser.add_argument("-m","--message",default="",help="(optional) change reminder message. Usage: work message -m {message}")
+parser.add_argument("-m","--message",default="",help="(optional) change reminder message. Usage: work message -s {message}")
 args = parser.parse_args()
 
 def read_work_mode():
@@ -53,11 +53,12 @@ def read_work_delay():
             file_read.close()
             if(mode[0]=="set"):
                 return mode[1]
+        return "-1"
     else:
         file_write = open(workmode_path, 'a')
         file_write.write(f"set {DEFAULT_TIME}")
         file_write.close()
-        return DEFAULT_TIME
+        return str(DEFAULT_TIME)
 
 def write_work_mode(mode,time=DEFAULT_TIME):
     change_mode(mode,time)
@@ -111,8 +112,10 @@ def check_next():
     return -1
 
 if(args.action == "get"):
+    current_delay = read_work_delay()
     current_mode = read_work_mode()
-    if(check_next() == -1 and current_mode == "set"):
+    next = check_next()
+    if((next == -1 and current_mode == "set") or (int(current_delay) > next)):
         current_mode = "unset"
         write_work_mode("unset",-1)
     print(f"current mode is {current_mode}")
@@ -137,16 +140,19 @@ elif(args.action == "unset"):
         print("work mode already unset")
 elif(args.action == "next"):
     next = check_next()
-    if(next!=-1):
+    if(next!=-1 and int(next) <= int(read_work_delay())):
         print(f"next reminder is in {next} minutes")
+    elif(int(next) > int(read_work_delay())):
+        write_work_mode("unset",-1)
+        print("enable work mode to check next reminder")
     else:
         print("enable work mode to check next reminder")
 elif(args.action == "message"):
     message=args.message
     action="set"
-    if(args.message == "default"):
+    if(message == "default"):
         message=DEFAULT_MESSAGE
-    elif(args.message == ""):
+    elif(message == ""):
         action="get"
     change_message(action,message)
     if(action=="set"):
@@ -155,6 +161,8 @@ elif(args.action == "log"):
     subprocess.run(["cat",productivity_log_path])
 elif(args.action == "reminder"):
     if read_work_mode() == "set":
+        if(not Path(productivity_log_path).exists()):
+            Path(productivity_log_path).touch()
         os_type = platform.system()
         if os_type == "Darwin":
             process = subprocess.Popen(['afplay',sound_path])
