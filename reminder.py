@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.13.3"
+VERSION = "v0.13.4"
 
 import argparse
 import os
@@ -158,7 +158,16 @@ elif(args.action == "message"):
     if(action=="set"):
         print(f"Set message to: \"{message}\"")
 elif(args.action == "log"):
-    subprocess.run(["cat",productivity_log_path])
+    try:
+        print("opening productivity.log")
+        subprocess.run(["open",productivity_log_path])
+    except:
+        print("could not open productivity.log")
+        print("attempting to list productivity.log here:")
+        try:
+            subprocess.run(["cat",productivity_log_path])
+        except:
+            print("could not list productivity.log")
 elif(args.action == "reminder"):
     if read_work_mode() == "set":
         if(not Path(productivity_log_path).exists()):
