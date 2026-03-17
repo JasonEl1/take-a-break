@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.13.5"
+VERSION = "v0.14.0"
 
 import argparse
 import os
@@ -172,6 +172,11 @@ elif(args.action == "log"):
             subprocess.run(["cat",productivity_log_path])
         except:
             print("could not list productivity.log")
+elif(args.action == "settings"):
+    try:
+        subprocess.run(["cat",settings_path])
+    except:
+        print("could not print settings.json")
 elif(args.action == "reminder"):
     if read_work_mode() == "set":
         if(not Path(productivity_log_path).exists()):

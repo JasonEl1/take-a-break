@@ -28,6 +28,7 @@ work next                     -> get  time remaining until next reminder
 work log                      -> get all productivity log entries
 work message                  -> get current reminder message
 work message -m message       -> set reminder message to custom string
+work settings                 -> print current settings.json
 work --help                   -> show help page
 ```
 
