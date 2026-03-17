@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.13.4"
+VERSION = "v0.13.5"
 
 import argparse
 import os
@@ -31,7 +31,7 @@ DEFAULT_MESSAGE=settings["DEFAULT_MESSAGE"]
 parser = argparse.ArgumentParser(prog="work",epilog=f"take-a-break {VERSION}")
 parser.add_argument("action",help="action to execute")
 parser.add_argument("-t","--time",default=DEFAULT_TIME,help="(optional) reminder time interval")
-parser.add_argument("-m","--message",default="",help="(optional) change reminder message. Usage: work message -s {message}")
+parser.add_argument("-m","--message",default="",help="(optional) change reminder message. Usage: work message -m {message}")
 args = parser.parse_args()
 
 def read_work_mode():
@@ -65,7 +65,7 @@ def write_work_mode(mode,time=DEFAULT_TIME):
     subprocess.call(['sh',addcron_path,fullpath,mode,time])
     if(mode == "set"):
         print(f"set work mode with interval {time} minutes")
-    # important: call write_work_mode() with time!=DEFAULT_TIME to hide unset output
+    # important: call write_work_mode("unset", time) with time!=DEFAULT_TIME to hide unset output
     elif(mode == "unset" and time==DEFAULT_TIME):
         print(f"unset work mode")
 
@@ -118,6 +118,7 @@ if(args.action == "get"):
     if((next == -1 and current_mode == "set") or (int(current_delay) > next)):
         current_mode = "unset"
         write_work_mode("unset",-1)
+        current_mode = "unset"
     print(f"current mode is {current_mode}")
 elif(args.action == "set"):
     if read_work_mode() == "unset":
@@ -129,6 +130,9 @@ elif(args.action == "set"):
                 print("invalid time argument - must be numeric")
                 exit()
             write_work_mode("set",str(time))
+            if(args.message != ""):
+                change_message("set",args.message)
+                print(f"set message to: {args.message}")
         else:
             write_work_mode("set",DEFAULT_TIME)
     else:
@@ -143,7 +147,7 @@ elif(args.action == "next"):
     if(next!=-1 and int(next) <= int(read_work_delay())):
         print(f"next reminder is in {next} minutes")
     elif(int(next) > int(read_work_delay())):
-        write_work_mode("unset",-1)
+        write_work_mode("unset","-1")
         print("enable work mode to check next reminder")
     else:
         print("enable work mode to check next reminder")

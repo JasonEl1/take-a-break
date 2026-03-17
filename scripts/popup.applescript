@@ -5,7 +5,7 @@ on run args
     set message_path to (POSIX file (folder_path & "message.txt"))
     set break_message to read file message_path
 
-    set pressed to display alert "Break Reminder" message break_message buttons {"Close", "Restart"} default button "Restart"
+    set pressed to display alert "Break Reminder" message break_message buttons {"Unset", "Restart"} default button "Restart"
     set button to button returned of pressed
 
     do shell script "sh " & folder_path & "/scripts/addcron.sh " & folder_path & " unset 20"
