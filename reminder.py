@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.14.0"
+VERSION = "v0.14.1"
 
 import argparse
 import os
@@ -117,7 +117,7 @@ if(args.action == "get"):
     next = check_next()
     if((next == -1 and current_mode == "set") or (int(current_delay) > next)):
         current_mode = "unset"
-        write_work_mode("unset",-1)
+        write_work_mode("unset","-1")
         current_mode = "unset"
     print(f"current mode is {current_mode}")
 elif(args.action == "set"):
