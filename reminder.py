@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.14.1"
+VERSION = "v0.14.2"
 
 import argparse
 import os
@@ -121,7 +121,14 @@ if(args.action == "get"):
         current_mode = "unset"
     print(f"current mode is {current_mode}")
 elif(args.action == "set"):
-    if read_work_mode() == "unset":
+    already_set = False
+    if(read_work_mode() == "set"):
+        next = check_next()
+        if(next!=-1 and int(next) <= int(read_work_delay())):
+            print("work mode already set")
+            already_set = True
+
+    if already_set == False:
         if(args.time != "-1"):
             time = args.time
             try:
@@ -135,8 +142,6 @@ elif(args.action == "set"):
                 print(f"set message to: {args.message}")
         else:
             write_work_mode("set",DEFAULT_TIME)
-    else:
-        print("work mode already set")
 elif(args.action == "unset"):
     if read_work_mode() == "set":
         write_work_mode("unset",DEFAULT_TIME)
