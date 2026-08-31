@@ -1,6 +1,6 @@
 # take-a-break
 
-Python command line tool to remind you to take breaks when working. Set a reminder interval and an optional custom message from the command line and don't worry about it until the reminder! At each reminder you can also optionally input a productivity score (1-10) which will be saved in a local `productivity.log` file. Currently only tested on MacOS and currently only compiled for MacOS ARM.
+Python command line tool to remind you to take breaks when working. Set a reminder interval and an optional custom message from the command line and don't worry about it until the reminder! At each reminder you can also optionally input a productivity score (1-10) which will be saved in a local `productivity.log` file. **Currently only tested on MacOS and currently only compiled for MacOS ARM.**
 
 ### Quick setup (MacOS/Linux)
 
@@ -22,7 +22,7 @@ Use the tool using the name `work`. The following commands are available:
 work get                      -> get current state of work mode (set / unset)
 work set                      -> set work mode with default interval of 20 minutes
 work set -t value             -> set work mode with a specific reminder interval (minutes)
-work set -t value -m message  -> set work mode with specific reminder interval and custom message
+work set -t value -m message  -> set work mode with custom reminder interval and message
 work unset                    -> unset work mode
 work next                     -> get  time remaining until next reminder
 work log                      -> get all productivity log entries

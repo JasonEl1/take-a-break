@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.14.2"
+VERSION = "v0.14.3"
 
 import argparse
 import os
@@ -29,7 +29,7 @@ DEFAULT_TIME=settings["DEFAULT_TIME"]
 DEFAULT_MESSAGE=settings["DEFAULT_MESSAGE"]
 
 parser = argparse.ArgumentParser(prog="work",epilog=f"take-a-break {VERSION}")
-parser.add_argument("action",help="action to execute")
+parser.add_argument("action",help="Action to execute. Allowed commands are 'set', 'unset', 'get', 'next', 'message', and 'log'.")
 parser.add_argument("-t","--time",default=DEFAULT_TIME,help="(optional) reminder time interval")
 parser.add_argument("-m","--message",default="",help="(optional) change reminder message. Usage: work message -m {message}")
 args = parser.parse_args()
@@ -217,5 +217,5 @@ elif(args.action == "reminder"):
 elif(args.action=="uninstall"):
     subprocess.call([uninstall_path])
 else:
-    print("unknown command, please try again")
+    print("unknown command, please try again or use -h / --help for a list of commands")
     exit()
