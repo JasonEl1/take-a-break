@@ -1,8 +1,8 @@
 # take-a-break
 
-Python command line tool to remind you to take breaks when working. Set a reminder interval and an optional custom message from the command line and don't worry about it until the reminder! At each reminder you can also optionally input a productivity score (1-10) which will be saved in a local `productivity.log` file. **Currently only tested on MacOS and currently only compiled for MacOS ARM.**
+Python command line tool for **MacOS** to remind you to take breaks when working. Set a reminder interval and an optional custom message from the command line and don't worry about it until the reminder! At each reminder you can also optionally input a productivity score (1-10) which will be saved in a local `productivity.log` file.
 
-### Quick setup (MacOS/Linux)
+### Quick setup (MacOS)
 
 Open the `take-a-break` folder after downloading and run the following command in the terminal: `./setup.sh`
 
