@@ -2,8 +2,25 @@
 
 echo "Installing take-a-break..."
 
-echo "Copying executable to /usr/local/bin/work..."
-sudo cp work /usr/local/bin/work
+echo "Will install executable in /usr/local/bin. Continue (y) or enter a custom location (n):"
+read custom_install_yn
+
+if [ $custom_install_yn = "y" ]; then
+
+    echo "Copying executable to /usr/local/bin/work..."
+    sudo cp work /usr/local/bin/work
+else
+    if [ $custom_install_yn = "n" ]; then
+        echo "Enter custom install directory: "
+        read custom_install_location
+        if [ ! -d "$custom_install_location" ]; then
+            echo "Directory ($custom_install_location) does not exist! Please run this script again."
+            exit 1
+        fi
+        echo "Copying executable to $custom_install_location/work"
+        cp work "$custom_install_location"/work || sudo cp work "$custom_install_location"/work
+    fi
+fi
 
 echo "Copying program files to ~/.local/share/take-a-break..."
 rm screenshot.png
