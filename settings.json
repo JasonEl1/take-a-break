@@ -1,4 +1,8 @@
 {
   "DEFAULT_TIME": "20",
-  "DEFAULT_MESSAGE": "Take a break to be more productive!"
+  "MESSAGE_PRESETS": {
+    "default": "Take a break to be more productive!"
+  },
+  "PRODUCTIVITY_LOG_PROMPTS": "true",
+  "REMINDER_AUDIO": "true"
 }

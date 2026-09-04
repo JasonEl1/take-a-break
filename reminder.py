@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.14.4"
+VERSION = "v0.14.5"
 
 import argparse
 import os
@@ -26,7 +26,7 @@ settings_path = f"{fullpath}/settings.json"
 settings = json.loads(Path(settings_path).read_text())
 
 DEFAULT_TIME=settings["DEFAULT_TIME"]
-DEFAULT_MESSAGE=settings["DEFAULT_MESSAGE"]
+DEFAULT_MESSAGE=settings["MESSAGE_PRESETS"]["default"]
 
 parser = argparse.ArgumentParser(prog="work",epilog=f"take-a-break {VERSION}")
 parser.add_argument("action",help="Action to execute. Allowed commands are 'set', 'unset', 'get', 'next', 'message', and 'log'.")
@@ -186,12 +186,17 @@ elif(args.action == "reminder"):
     if read_work_mode() == "set":
         if(not Path(productivity_log_path).exists()):
             Path(productivity_log_path).touch()
+        PLAY_SOUND = False
+        if(settings["REMINDER_AUDIO"] == "true"):
+            PLAY_SOUND = True
         os_type = platform.system()
         if os_type == "Darwin":
-            process = subprocess.Popen(['afplay',sound_path])
+            if(PLAY_SOUND):
+                process = subprocess.Popen(['afplay',sound_path])
             subprocess.run(["osascript", applescript_path,fullpath,read_work_delay()])
         elif os_type == "Linux":
-            process = subprocess.Popen(['aplay',sound_path])
+            if(PLAY_SOUND):
+                process = subprocess.Popen(['aplay',sound_path])
 
             import tkinter as tk
             from tkinter import messagebox
@@ -201,8 +206,9 @@ elif(args.action == "reminder"):
             messagebox.showinfo("Reminder", "Reminder to take a break!")
             root.mainloop()
         elif os_type == "Windows":
-            import winsound
-            winsound.PlaySound(sound_path, winsound.SND_ASYNC)
+            if(PLAY_SOUND):
+                import winsound
+                winsound.PlaySound(sound_path, winsound.SND_ASYNC)
 
             import tkinter as tk
             from tkinter import messagebox
@@ -211,7 +217,6 @@ elif(args.action == "reminder"):
             root.title("Break Reminder")
             messagebox.showinfo("Reminder", "Reminder to take a break!")
             root.mainloop()
-
         else:
             print("warning : your operating system is not yet supported for the sound feature")
 elif(args.action=="uninstall"):
