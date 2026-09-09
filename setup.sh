@@ -12,12 +12,7 @@ fi
 
 echo "Downloading binary for ${OS}-${ARCH} from GitHub..."
 
-URL=$(curl -sL "https://github.com" | \
-      grep "browser_download_url" | \
-      grep "work-"$OS"-"$ARCH | \
-      sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/')
-
-curl -L -o $(pwd)/work "$URL"
+curl -o work -s https://api.github.com/repos/JasonEl1/take-a-break/releases/latest | grep '"browser_download_url":' | grep "work-"$OS"-"$ARCH | grep -vE '(\.pem|\.sig)' | grep -o 'https://[^"]*'
 
 echo "Done"
 
