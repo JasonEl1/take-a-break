@@ -15,7 +15,7 @@ URL=$(curl -sL "https://github.com" | \
       grep "work-"$OS"-"$ARCH | \
       sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/')
 
-curl -L -o "./work" "$URL"
+curl -L -o $(pwd)/work "$URL"
 
 echo "Downloading binary for ${OS}-${ARCH} from GitHub..."
 echo "Done"

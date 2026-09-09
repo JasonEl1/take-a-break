@@ -3,3 +3,4 @@ workmode.txt
 dev_update.sh
 cross_compile.sh
 /build
+work
