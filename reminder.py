@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.15.0"
+VERSION = "v0.16.0"
 
 import argparse
 import os
@@ -9,6 +9,7 @@ import datetime
 import platform
 from pathlib import Path
 import json
+import random
 
 fullpath = os.path.abspath(__file__)
 name_len = len(os.path.basename(__file__))
@@ -26,7 +27,6 @@ settings_path = f"{fullpath}/settings.json"
 settings = json.loads(Path(settings_path).read_text())
 
 DEFAULT_TIME=settings["DEFAULT_TIME"]
-DEFAULT_MESSAGE=settings["MESSAGE_PRESETS"]["default"]
 
 parser = argparse.ArgumentParser(prog="work",epilog=f"take-a-break {VERSION}")
 
@@ -47,10 +47,13 @@ log_parser = subparsers.add_parser("log", help="view statistics from producrtivi
 message_parser = subparsers.add_parser("message", help="check or set current reminder message")
 message_parser.add_argument("-m", "--message", default="",help="set a new custom reminder message")
 message_parser.add_argument("-p", "--preset", default="", help="save message as a preset with a custom name")
+message_parser.add_argument("-rmp", "--remove-preset",default="",help="remove a message preset")
+message_parser.add_argument("-l","--list",action="store_true",help="list saved message presets")
 
 subparsers.add_parser("reminder")
 
 settings_parser = subparsers.add_parser("settings", help="view or edit settings")
+settings_parser.add_argument("-e","--edit",nargs=2,metavar=('INDEX','VALUE'),default=("",""),help="which settings parameter to edit and the new value to assign")
 
 args = parser.parse_args()
 
@@ -89,7 +92,7 @@ def write_work_mode(mode,time=DEFAULT_TIME):
     elif(mode == "unset" and time==DEFAULT_TIME):
         print(f"unset work mode")
 
-def change_message(mode,message=DEFAULT_MESSAGE):
+def change_message(mode,message):
     path = Path(message_path)
     if(mode == "set"):
         path.write_text(message)
@@ -130,6 +133,15 @@ def check_next():
 
         return 60*hours_to_next + mins_to_next
     return -1
+
+def save_settings():
+    try:
+        with open(settings_path, 'w', encoding='utf-8') as settings_file:
+            json.dump(settings, settings_file, ensure_ascii=False, indent=4)
+        settings_file.close()
+    except:
+        print("failed to save settings")
+        exit()
 
 if(args.action == "get"):
     current_delay = read_work_delay()
@@ -178,19 +190,47 @@ elif(args.action == "next"):
         print("enable work mode to check next reminder")
 elif(args.action == "message"):
     message=args.message
+    preset = args.preset
     action="set"
-    if(message == "default"):
-        message=DEFAULT_MESSAGE
-    elif(message == ""):
-        action="get"
+    if(message == ""):
+        remove_preset = args.remove_preset
+        if(remove_preset != ""):
+            if(remove_preset in settings["MESSAGE_PRESETS"]):
+                settings["MESSAGE_PRESETS"].pop(remove_preset)
+
+                save_settings()
+
+                print(f"successfully removed message preset {remove_preset}")
+            else:
+                print("message preset does not exist")
+            exit()
+        elif(args.list):
+            print("saved message presets:\n")
+            for preset in list(settings["MESSAGE_PRESETS"].keys()):
+                print(f"{preset} : {settings['MESSAGE_PRESETS'][preset]}")
+
+            exit()
+        else:
+            action="get"
+
+    if(message in settings["MESSAGE_PRESETS"]):
+        message=settings["MESSAGE_PRESETS"][message]
+        if(isinstance(message,list)):
+            message=message[random.randint(0,len(message)-1)]
+
     change_message(action,message)
     if(action=="set"):
-        print(f"Set message to: \"{message}\"")
-        if(args.preset != ""):
-            settings["MESSAGE_PRESETS"][args.preset] = message
-            with open(settings_path, 'w', encoding='utf-8') as settings_file:
-                json.dump(settings, settings_file, ensure_ascii=False, indent=4)
-            settings_file.close()
+        print(f"set message to: \"{message}\"")
+        if(preset != ""):
+            if(preset not in settings["MESSAGE_PRESETS"]):
+                settings["MESSAGE_PRESETS"][preset] = message
+            elif(isinstance(settings["MESSAGE_PRESETS"][preset],list)):
+                settings["MESSAGE_PRESETS"][preset].append(message)
+            else:
+                settings["MESSAGE_PRESETS"][preset] = [settings["MESSAGE_PRESETS"][preset],message]
+            save_settings()
+
+            print(f"added {preset} to message presets list")
 elif(args.action == "log"):
     try:
         print("opening productivity.log")
@@ -203,11 +243,33 @@ elif(args.action == "log"):
         except:
             print("could not list productivity.log")
 elif(args.action == "settings"):
-    print(f"\nsettings file is located at {settings_path}")
-    try:
-        subprocess.run(["cat",settings_path])
-    except:
-        print("could not print settings.json")
+    if(args.edit == ("","")):
+        settings_params = list(settings.keys())
+        for param_no in range(len(settings_params)):
+            if(settings_params[param_no] != "MESSAGE_PRESETS"): # MESSAGE_PRESETS are managed directly by message command
+                print(f"[{param_no}] : {settings_params[param_no]} = {settings[settings_params[param_no]]}")
+
+        param_editing = print(f"\ncall the settings command with the --edit flag and one of these numeric values, along with a new value to change a settings parameter.\n\nalternatively you can edit settings.json directly, located at {settings_path}")
+        print(f"\ntake-a-break {VERSION}")
+    else:
+        index, value = args.edit
+        try:
+            index = int(index)
+        except ValueError:
+            print("invalid index, try running the settings command without any flags first")
+
+        settings_keys = list(settings.keys())
+
+        if(index < 0 or index >= len(settings_keys)):
+            print("setting parameter index out of range, try running the settings command without any flags")
+            exit()
+
+        if(settings_keys[index] == "MESSAGE_PRESETS"):
+            print("Please use the message command along with the --remove-preset flag to remove a message preset, or the --preset flag to add one.")
+        else:
+            settings[list(settings.keys())[index]] = value
+
+            save_settings()
 elif(args.action == "reminder"):
     if read_work_mode() == "set":
         if(not Path(productivity_log_path).exists()):

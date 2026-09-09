@@ -29,7 +29,10 @@ work log                          -> get all productivity log entries
 work message                      -> get current reminder message
 work message -m message           -> set reminder message to custom string
 work message -m message -p preset -> set reminder message and save as preset
+work message -rmp preset          -> remove a saved message preset
+work message -l                   -> list all saved message presets
 work settings                     -> print current settings.json contents
+work settings -e                  -> edit a settings parameter
 work --help                       -> show help page
 ```
 
