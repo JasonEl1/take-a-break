@@ -2,6 +2,26 @@
 
 echo "Installing take-a-break..."
 
+OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+
+ARCH=$(uname -m)
+
+if [ "$ARCH" == x86_64 ]; then
+    ARCH="amd64"
+fi
+
+URL=$(curl -sL "https://github.com" | \
+      grep "browser_download_url" | \
+      grep "work-"$OS"-"$ARCH | \
+      sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/')
+
+curl -L -o "./work" "$URL"
+
+echo "Downloading binary for ${OS}-${ARCH} from GitHub..."
+echo "Done"
+
+chmod +x ./work
+
 echo "Will install executable in /usr/local/bin. Continue (y) or enter a custom location (n):"
 read custom_install_yn
 

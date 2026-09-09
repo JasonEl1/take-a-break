@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.16.0"
+VERSION = "v0.17.0"
 
 import argparse
 import os
@@ -19,6 +19,7 @@ workmode_path = f"{fullpath}/workmode.txt"
 addcron_path = f"{fullpath}/scripts/addcron.sh"
 sound_path = f"{fullpath}/sound.wav"
 applescript_path = f"{fullpath}/scripts/popup.scpt"
+linux_popup_path = f"{fullpath}/scripts/popup_linux.sh"
 uninstall_path = f"{fullpath}/scripts/uninstall.sh"
 message_path = f"{fullpath}/message.txt"
 productivity_log_path = f"{fullpath}/productivity.log"
@@ -286,13 +287,7 @@ elif(args.action == "reminder"):
             if(PLAY_SOUND):
                 process = subprocess.Popen(['aplay',sound_path])
 
-            import tkinter as tk
-            from tkinter import messagebox
-
-            root = tk.Tk()
-            root.title("Break Reminder")
-            messagebox.showinfo("Reminder", "Reminder to take a break!")
-            root.mainloop()
+            subprocess.run(["sh",linux_popup_path,fullpath,read_work_delay()])
         elif os_type == "Windows":
             if(PLAY_SOUND):
                 import winsound
