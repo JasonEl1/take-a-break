@@ -3,7 +3,7 @@
 Python command line tool for **MacOS and Linux** to remind you to take breaks when working. Set a reminder interval and an optional custom message from the command line and don't worry about it until the reminder! At each reminder you can also optionally input a productivity score (1-10) which will be saved in a local `productivity.log` file.
 
 > [!NOTE]
-> Has only been fully tested on MacOS. It should work in theory on Linux as well but has not been thoroughly tested.
+> Has only been fully tested on MacOS. It should work in theory on Linux as well but has not been tested.
 
 ### Quick setup (MacOS)
 

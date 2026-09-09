@@ -10,6 +10,8 @@ if [ "$ARCH" == x86_64 ]; then
     ARCH="amd64"
 fi
 
+echo "Downloading binary for ${OS}-${ARCH} from GitHub..."
+
 URL=$(curl -sL "https://github.com" | \
       grep "browser_download_url" | \
       grep "work-"$OS"-"$ARCH | \
@@ -17,7 +19,6 @@ URL=$(curl -sL "https://github.com" | \
 
 curl -L -o $(pwd)/work "$URL"
 
-echo "Downloading binary for ${OS}-${ARCH} from GitHub..."
 echo "Done"
 
 chmod +x ./work

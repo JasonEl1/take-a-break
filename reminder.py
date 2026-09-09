@@ -271,6 +271,8 @@ elif(args.action == "settings"):
             settings[list(settings.keys())[index]] = value
 
             save_settings()
+
+            print(f"successfully changed {list(settings.keys())[index]} to {value}")
 elif(args.action == "reminder"):
     if read_work_mode() == "set":
         if(not Path(productivity_log_path).exists()):
