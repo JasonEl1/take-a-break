@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-VERSION = "v0.14.5"
+VERSION = "v0.15.0"
 
 import argparse
 import os
@@ -29,9 +29,29 @@ DEFAULT_TIME=settings["DEFAULT_TIME"]
 DEFAULT_MESSAGE=settings["MESSAGE_PRESETS"]["default"]
 
 parser = argparse.ArgumentParser(prog="work",epilog=f"take-a-break {VERSION}")
-parser.add_argument("action",help="Action to execute. Allowed commands are 'set', 'unset', 'get', 'next', 'message', and 'log'.")
-parser.add_argument("-t","--time",default=DEFAULT_TIME,help="(optional) reminder time interval")
-parser.add_argument("-m","--message",default="",help="(optional) change reminder message. Usage: work message -m {message}")
+
+subparsers = parser.add_subparsers(dest="action", required=True, description="action commands")
+
+get_parser = subparsers.add_parser("get", help="get the current mode")
+
+set_parser = subparsers.add_parser("set", help="set mode to work mode")
+set_parser.add_argument("-t", "--time", default=DEFAULT_TIME, help="custom time interval")
+set_parser.add_argument("-m", "--message", default="", help="shortcut way to change message when setting work mode")
+
+unset_parser = subparsers.add_parser("unset", help="unset work mode")
+
+next_parser = subparsers.add_parser("next", help="check how long until next reminder")
+
+log_parser = subparsers.add_parser("log", help="view statistics from producrtivity log")
+
+message_parser = subparsers.add_parser("message", help="check or set current reminder message")
+message_parser.add_argument("-m", "--message", default="",help="set a new custom reminder message")
+message_parser.add_argument("-p", "--preset", default="", help="save message as a preset with a custom name")
+
+subparsers.add_parser("reminder")
+
+settings_parser = subparsers.add_parser("settings", help="view or edit settings")
+
 args = parser.parse_args()
 
 def read_work_mode():
@@ -166,6 +186,11 @@ elif(args.action == "message"):
     change_message(action,message)
     if(action=="set"):
         print(f"Set message to: \"{message}\"")
+        if(args.preset != ""):
+            settings["MESSAGE_PRESETS"][args.preset] = message
+            with open(settings_path, 'w', encoding='utf-8') as settings_file:
+                json.dump(settings, settings_file, ensure_ascii=False, indent=4)
+            settings_file.close()
 elif(args.action == "log"):
     try:
         print("opening productivity.log")
@@ -178,6 +203,7 @@ elif(args.action == "log"):
         except:
             print("could not list productivity.log")
 elif(args.action == "settings"):
+    print(f"\nsettings file is located at {settings_path}")
     try:
         subprocess.run(["cat",settings_path])
     except:

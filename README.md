@@ -16,20 +16,21 @@ cd take-a-break
 
 ### How to use the tool:
 
-Use the tool using the name `work`. The following commands are available:
+Use the tool using the name `work` in the terminal. The following commands are available:
 
 ```
-work get                      -> get current state of work mode (set / unset)
-work set                      -> set work mode with default interval of 20 minutes
-work set -t value             -> set work mode with a specific reminder interval (minutes)
-work set -t value -m message  -> set work mode with custom reminder interval and message
-work unset                    -> unset work mode
-work next                     -> get  time remaining until next reminder
-work log                      -> get all productivity log entries
-work message                  -> get current reminder message
-work message -m message       -> set reminder message to custom string
-work settings                 -> print current settings.json
-work --help                   -> show help page
+work get                          -> get current state of work mode (set / unset)
+work set                          -> set work mode with default interval of 20 minutes
+work set -t value                 -> set work mode with specific reminder interval (minutes)
+work set -t value -m message      -> set work mode with custom reminder interval and message
+work unset                        -> unset work mode
+work next                         -> get  time remaining until next reminder
+work log                          -> get all productivity log entries
+work message                      -> get current reminder message
+work message -m message           -> set reminder message to custom string
+work message -m message -p preset -> set reminder message and save as preset
+work settings                     -> print current settings.json contents
+work --help                       -> show help page
 ```
 
 > [!TIP]
